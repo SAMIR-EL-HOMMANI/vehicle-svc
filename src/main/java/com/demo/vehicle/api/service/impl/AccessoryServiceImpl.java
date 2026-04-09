@@ -7,11 +7,13 @@ import com.demo.vehicle.api.repository.AccessoryRepository;
 import com.demo.vehicle.api.repository.VehicleRepository;
 import com.demo.vehicle.api.service.AccessoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class AccessoryServiceImpl implements AccessoryService {
     private final AccessoryRepository accessoryRepository;
     private final AccessoryMapper accessoryMapper;
@@ -40,6 +42,7 @@ public class AccessoryServiceImpl implements AccessoryService {
     }
 
     @Override
+    @Transactional
     public AccessoryDto save(AccessoryDto accessoryDto) {
         Long vehicleId = accessoryDto.vehicleId();
         if (vehicleId == null || !vehicleRepository.existsById(vehicleId)) {
@@ -50,6 +53,7 @@ public class AccessoryServiceImpl implements AccessoryService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         accessoryRepository.deleteById(id);
     }

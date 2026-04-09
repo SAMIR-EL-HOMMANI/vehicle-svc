@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class VehicleServiceImpl implements VehicleService {
     private final VehicleRepository vehicleRepository;
@@ -58,6 +58,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    @Transactional
     public VehicleDto createVehicle(VehicleCreateDto vehicle) {
         log.info("Create new vehicle {}", vehicle);
         var garage = garageService.getByIdOrThrowForUpdate(vehicle.garageId());
@@ -72,6 +73,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    @Transactional
     public VehicleDto updateVehicle(VehicleUpdateDto vehicle) {
         log.info("Updating vehicle {}", vehicle);
         var vehicleBeforeUpdate = vehicleRepository.findById(vehicle.id())
@@ -91,6 +93,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         vehicleRepository.deleteById(id);
     }

@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @Slf4j
 public class GarageServiceImpl implements GarageService {
@@ -60,6 +60,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public Garage getByIdOrThrowForUpdate(Long id) {
         return garageRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Garage with ID %d not found".formatted(id)));
@@ -73,6 +74,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public GarageDto addGarage(GarageDto garageDto) {
         log.info("Adding new garage : {}", garageDto);
         var savedGarage = garageRepository.save(garageMapper.toEntity(garageDto));
@@ -80,6 +82,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public GarageDto updateGarage(GarageDto garageDto) {
         log.info("Updating garage : {}", garageDto);
         if (!garageRepository.existsById(garageDto.id()))
@@ -95,6 +98,7 @@ public class GarageServiceImpl implements GarageService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         garageRepository.deleteById(id);
     }
